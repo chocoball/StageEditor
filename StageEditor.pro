@@ -4,15 +4,15 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT			+=	core gui opengl xml
 
-TARGET = StageEditor
-TEMPLATE = app
+TARGET		=	StageEditor
+TEMPLATE	=	app
 
 
-SOURCES += main.cpp\
-        mainwindow.cpp
+SOURCES		+=	src/main.cpp		\
+				src/mainwindow.cpp
 
-HEADERS  += mainwindow.h
+HEADERS		+=	src/mainwindow.h
 
-FORMS    += mainwindow.ui
+FORMS		+=	ui/mainwindow.ui
