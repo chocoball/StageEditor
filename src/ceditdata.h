@@ -2,6 +2,7 @@
 #define CEDITDATA_H
 
 #include "include.h"
+#include "cstagetreemodel.h"
 
 class CEditData
 {
@@ -16,9 +17,11 @@ public:
 	void release() ;
 
 private:
-	CEditData() {}
-	~CEditData() {}
+	CEditData()		{}
+	~CEditData()	{}
 	CEditData &operator =(CEditData &rhs) ;
+
+	CStageTreeModel	*m_pStageModel ;
 } ;
 
 #define gEditData CEditData::getInstance()
