@@ -11,8 +11,17 @@ TEMPLATE	=	app
 
 
 SOURCES		+=	src/main.cpp		\
-				src/mainwindow.cpp
+				src/mainwindow.cpp	\
+				src/csetting.cpp \
+    src/ceditdata.cpp
 
-HEADERS		+=	src/mainwindow.h
+HEADERS		+=	src/mainwindow.h	\
+				src/csetting.h		\
+				src/include.h \
+    src/ceditdata.h
 
-FORMS		+=	ui/mainwindow.ui
+FORMS		+=	ui/mainwindow.ui	\
+				ui/form_mock.ui
+
+
+
