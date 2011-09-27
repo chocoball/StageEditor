@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "include.h"
 #include "ceditdata.h"
+#include "form_maptab.h"
 
 #define kExecName	"StageEditor"
 #define kVersion	"0.0.1"
@@ -84,7 +85,7 @@ void MainWindow::addUIs()
 		}
 
 		QTabWidget *pTabWidget = new QTabWidget(this) ;
-		pTabWidget->insertTab(0, new QWidget(this), "Map") ;
+		pTabWidget->insertTab(0, new Form_Maptab(this), "Map") ;
 		pTabWidget->insertTab(1, new QWidget(this), "Object") ;
 
 		m_pSplitter->addWidget(m_pStageTree) ;
