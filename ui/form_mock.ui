@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>734</width>
-    <height>510</height>
+    <width>740</width>
+    <height>591</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>10</x>
      <y>10</y>
      <width>141</width>
-     <height>491</height>
+     <height>331</height>
     </rect>
    </property>
   </widget>
@@ -29,21 +29,41 @@
      <x>160</x>
      <y>10</y>
      <width>371</width>
-     <height>341</height>
+     <height>331</height>
     </rect>
    </property>
   </widget>
-  <widget class="Line" name="line">
+  <widget class="QTabWidget" name="tabWidget">
    <property name="geometry">
     <rect>
-     <x>170</x>
-     <y>360</y>
-     <width>351</width>
-     <height>16</height>
+     <x>540</x>
+     <y>10</y>
+     <width>191</width>
+     <height>331</height>
     </rect>
    </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <widget class="QWidget" name="tab_map">
+    <attribute name="title">
+     <string>Tab 1</string>
+    </attribute>
+   </widget>
+   <widget class="QWidget" name="tab_object">
+    <attribute name="title">
+     <string>Tab 2</string>
+    </attribute>
+   </widget>
+  </widget>
+  <widget class="QListView" name="listView">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>360</y>
+     <width>141</width>
+     <height>201</height>
+    </rect>
    </property>
   </widget>
  </widget>

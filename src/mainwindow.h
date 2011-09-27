@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QSplitter>
+#include "cglgameview.h"
 
 namespace Ui {
 	class MainWindow ;
@@ -32,7 +34,10 @@ private:
 	void writeSetting() ;
 
 private:
-	Ui::MainWindow *ui ;
+	Ui::MainWindow	*ui ;
+
+	QSplitter		*m_pSplitter ;
+	CGLGameView		*m_pGlView ;
 } ;
 
 #endif // MAINWINDOW_H

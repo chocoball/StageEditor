@@ -21,16 +21,17 @@ public:
 	QModelIndex index(int row, int column = 0, const QModelIndex &parent = QModelIndex()) const ;
 	QModelIndex parent(const QModelIndex &child) const ;
 
-	Qt::DropActions supportedDropActions() const ;
-	QStringList mimeTypes() const ;
-	QMimeData *mimeData(const QModelIndexList &indexes) const ;
-	bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) ;
+	CStageTreeItem *getItem(const QModelIndex &index) const ;
 
-	CStageTreeItem *getItem(const QModelIndex &index) ;
+	QModelIndex addItem(int type, QString name) ;
+	void removeItem(const QModelIndex &index) ;
 
 signals:
 
 public slots:
+
+private:
+	void updateIndex(CStageTreeItem *p, int row, QModelIndex parent) ;
 
 private:
 	CStageTreeItem	*m_pRootItem ;

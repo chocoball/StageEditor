@@ -22,6 +22,8 @@ public:
 
 	kAccessor(QByteArray, m_mainWindowState, MainWindowState)
 	kAccessor(QByteArray, m_mainWindowGeometry, MainWindowGeometry)
+	kAccessor(QByteArray, m_splitterState, SplitterState)
+	kAccessor(QByteArray, m_splitterGeometry, SplitterGeometry)
 
 private:
 	CSetting() {}

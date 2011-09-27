@@ -3,7 +3,15 @@
 CStageTreeItem::CStageTreeItem(CStageTreeItem *parent)
 {
 	m_pParent = parent ;
+
 	setType(kType_None) ;
+}
+
+CStageTreeItem::CStageTreeItem(int type, QString name, CStageTreeItem *parent)
+{
+	setType(type) ;
+	m_name = name ;
+	m_pParent = parent ;
 }
 
 CStageTreeItem::~CStageTreeItem()
@@ -45,3 +53,14 @@ void CStageTreeItem::setData(QVariant val, int role)
 	}
 }
 
+CStageTreeItem *CStageTreeItem::getChild(int type)
+{
+	for ( int i = 0 ; i < childCount() ; i ++ ) {
+		if ( !child(i) ) { continue ; }
+
+		if ( child(i)->getType() == type ) {
+			return child(i) ;
+		}
+	}
+	return NULL ;
+}

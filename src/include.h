@@ -9,6 +9,6 @@
 		type	member ;
 
 #include "csetting.h"
-#include "ceditdata.h"
+
 
 #endif // INCLUDE_H

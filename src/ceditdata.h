@@ -16,6 +16,8 @@ public:
 	void initialize() ;
 	void release() ;
 
+	CStageTreeModel *getModel() { return m_pStageModel ; }
+
 private:
 	CEditData()		{}
 	~CEditData()	{}
