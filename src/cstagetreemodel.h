@@ -26,6 +26,8 @@ public:
 	QModelIndex addItem(int type, QString name) ;
 	void removeItem(const QModelIndex &index) ;
 
+	int getType(const QModelIndex &index) ;
+
 signals:
 
 public slots:

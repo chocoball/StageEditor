@@ -28,6 +28,22 @@ MainWindow::~MainWindow()
 	delete ui ;
 }
 
+void MainWindow::slot_stageTreeCustomContextMenu(QPoint pos)
+{
+	QModelIndex index = m_pStageTree->indexAt(pos) ;
+	if ( !index.isValid() ) { return ; }
+
+	int type = gEditData.getModel()->getType(index) ;
+	switch ( type ) {
+		case CStageTreeItem::kType_Map:
+			break ;
+		case CStageTreeItem::kType_Object:
+			break ;
+		default:
+			return ;
+	}
+}
+
 void MainWindow::closeEvent(QCloseEvent *event)
 {
 Q_UNUSED(event)
@@ -51,10 +67,12 @@ void MainWindow::addUIs()
 	m_pSplitter = new QSplitter(this) ;
 	pLayout->addWidget(m_pSplitter) ;
 	{
-		QTreeView *pTree = new QTreeView(this) ;
-		pTree->setModel(gEditData.getModel()) ;
-		pTree->setMinimumSize(100, 300) ;
-		pTree->setHeaderHidden(true) ;
+		m_pStageTree = new QTreeView(this) ;
+		m_pStageTree->setModel(gEditData.getModel()) ;
+		m_pStageTree->setMinimumSize(100, 300) ;
+		m_pStageTree->setHeaderHidden(true) ;
+		connect(m_pStageTree, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slot_stageTreeCustomContextMenu(QPoint))) ;
+		gEditData.setStageTreeView(m_pStageTree) ;
 
 		QScrollArea *pScroll = new QScrollArea(this) ;
 		pScroll->setWidgetResizable(false) ;
@@ -66,10 +84,10 @@ void MainWindow::addUIs()
 		}
 
 		QTabWidget *pTabWidget = new QTabWidget(this) ;
-		pTabWidget->addTab(new QWidget(this), "Map") ;
-		pTabWidget->addTab(new QWidget(this), "Object") ;
+		pTabWidget->insertTab(0, new QWidget(this), "Map") ;
+		pTabWidget->insertTab(1, new QWidget(this), "Object") ;
 
-		m_pSplitter->addWidget(pTree) ;
+		m_pSplitter->addWidget(m_pStageTree) ;
 		m_pSplitter->addWidget(pScroll) ;
 		m_pSplitter->addWidget(pTabWidget) ;
 	}

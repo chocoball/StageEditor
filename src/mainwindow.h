@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QSplitter>
+#include <QTreeView>
+#include <QModelIndex>
 #include "cglgameview.h"
 
 namespace Ui {
@@ -18,13 +20,14 @@ public:
 	~MainWindow() ;
 
 public slots:
-	void closeEvent(QCloseEvent *event) ;
+	void slot_stageTreeCustomContextMenu(QPoint pos) ;
 
 signals:
 	void sig_keyPress(QKeyEvent *) ;
 	void sig_keyRelease(QKeyEvent *) ;
 
 protected:
+	void closeEvent(QCloseEvent *event) ;
 	void keyPressEvent(QKeyEvent *) ;
 	void keyReleaseEvent(QKeyEvent *) ;
 
@@ -38,6 +41,7 @@ private:
 
 	QSplitter		*m_pSplitter ;
 	CGLGameView		*m_pGlView ;
+	QTreeView		*m_pStageTree ;
 } ;
 
 #endif // MAINWINDOW_H

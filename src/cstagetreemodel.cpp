@@ -137,6 +137,12 @@ void CStageTreeModel::removeItem(const QModelIndex &index)
 	removeRows(index.row(), 1, index.parent()) ;
 }
 
+int CStageTreeModel::getType(const QModelIndex &index)
+{
+	CStageTreeItem *p = getItem(index) ;
+	return p->getType() ;
+}
+
 void CStageTreeModel::updateIndex(CStageTreeItem *p, int row, QModelIndex parent)
 {
 	p->setIndex(this->index(0, 0, parent)) ;
@@ -144,3 +150,4 @@ void CStageTreeModel::updateIndex(CStageTreeItem *p, int row, QModelIndex parent
 		updateIndex(p->child(i), i, p->getIndex()) ;
 	}
 }
+
