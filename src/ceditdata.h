@@ -10,6 +10,7 @@
 typedef struct {
 	QString		filePath ;
 	GLuint		nTexObj ;
+	QSize		origSize ;
 } GLTexture ;
 
 class CEditData
@@ -24,8 +25,8 @@ public:
 	void initialize() ;
 	void release() ;
 
-	void addTexture(QString path, GLuint obj) ;
-	GLuint getTexture(QString path) ;
+	void addTexture(QString path, GLuint obj, QSize origSize) ;
+	const GLTexture *getTexture(QString path) ;
 	QList<GLTexture> &getTextureList() { return m_textures ; }
 
 	CStageTreeModel	*getStageModel()	{ return m_pStageModel ; }
@@ -38,6 +39,7 @@ public:
 	}
 
 	kAccessor(QTreeView*, m_pStageTreeView, StageTreeView)
+	kAccessor(QSize, m_mapSize, MapSize)
 
 private:
 	CEditData()

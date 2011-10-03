@@ -95,8 +95,8 @@ void CAnm2D::renderOpenGL_FrameData(const FrameData &data, QMatrix4x4 mat)
 	AnmImage *pImage = getImage(data.nImage) ;
 	if ( !pImage ) { return ; }
 
-	int objNo = gEditData.getTexture(pImage->path) ;
-	if ( !objNo ) { return ; }
+	const GLTexture *pTex = gEditData.getTexture(pImage->path) ;
+	if ( !pTex ) { return ; }
 
 	glPushMatrix() ;
 	{
@@ -116,13 +116,13 @@ void CAnm2D::renderOpenGL_FrameData(const FrameData &data, QMatrix4x4 mat)
 		uvF.setTop((float)(pImage->origSize.height()-uv.top())/pImage->origSize.height());
 		uvF.setBottom((float)(pImage->origSize.height()-uv.bottom())/pImage->origSize.height());
 
-		glBindTexture(GL_TEXTURE_2D, objNo) ;
+		glBindTexture(GL_TEXTURE_2D, pTex->nTexObj) ;
 
 		QColor col ;
-		col.setRed(   data.rgba[0] / 255 );
-		col.setGreen( data.rgba[1] / 255 );
-		col.setBlue(  data.rgba[2] / 255 );
-		col.setAlpha( data.rgba[3] / 255 );
+		col.setRed(   data.rgba[0] );
+		col.setGreen( data.rgba[1] );
+		col.setBlue(  data.rgba[2] );
+		col.setAlpha( data.rgba[3] );
 
 		drawRect(rect, uvF, 0, col) ;
 	}

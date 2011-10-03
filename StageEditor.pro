@@ -19,7 +19,8 @@ SOURCES		+=	src/main.cpp			\
 				src/cglgameview.cpp		\
 				src/form_maptab.cpp		\
 				src/cmaplistmodel.cpp	\
-				src/canm2d.cpp
+				src/canm2d.cpp			\
+				src/util.cpp
 
 HEADERS		+=	src/mainwindow.h		\
 				src/csetting.h			\
@@ -31,7 +32,8 @@ HEADERS		+=	src/mainwindow.h		\
 				src/form_maptab.h		\
 				src/cmaplistmodel.h		\
 				src/canm2d.h			\
-				src/framedata.h
+				src/framedata.h			\
+				src/util.h
 
 FORMS		+=	ui/mainwindow.ui		\
 				ui/form_mock.ui			\

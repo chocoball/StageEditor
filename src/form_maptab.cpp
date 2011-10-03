@@ -13,9 +13,14 @@ Form_Maptab::Form_Maptab(QWidget *parent) :
 	ui->listView->setIconSize(QSize(32, 32)) ;
 	ui->listView->setGridSize(QSize(32, 32)) ;
 	ui->listView->setDragEnabled(true) ;
+	ui->spinBox_mapw->setValue(1024) ;
+	ui->spinBox_maph->setValue(1024) ;
+	gEditData.setMapSize(QSize(1024, 1024)) ;
 
 	connect(ui->pushButton_add, SIGNAL(clicked()), this, SLOT(slot_clickedAdd())) ;
 	connect(ui->pushButton_del, SIGNAL(clicked()), this, SLOT(slot_clickedDel())) ;
+	connect(ui->spinBox_mapw, SIGNAL(valueChanged(int)), this, SLOT(slot_changeMapW(int))) ;
+	connect(ui->spinBox_maph, SIGNAL(valueChanged(int)), this, SLOT(slot_changeMapH(int))) ;
 
 	setLayout(ui->verticalLayout) ;
 }
@@ -62,5 +67,23 @@ void Form_Maptab::slot_clickedDel()
 
 	CMapListModel *pModel = gEditData.getMapModel() ;
 	pModel->removeRows(index.row(), 1) ;
+}
+
+void Form_Maptab::slot_changeMapW(int val)
+{
+	QSize size = gEditData.getMapSize() ;
+	size.setWidth(val) ;
+	gEditData.setMapSize(size) ;
+
+	emit sig_changeMapSize() ;
+}
+
+void Form_Maptab::slot_changeMapH(int val)
+{
+	QSize size = gEditData.getMapSize() ;
+	size.setHeight(val) ;
+	gEditData.setMapSize(size) ;
+
+	emit sig_changeMapSize() ;
 }
 

@@ -1,7 +1,9 @@
 #include <QDragEnterEvent>
+#include <QDebug>
 #include "cglgameview.h"
 #include "ceditdata.h"
 #include "canm2d.h"
+#include "util.h"
 
 CGLGameView::CGLGameView(QWidget *parent) :
 	QGLWidget(QGLFormat(QGL::AlphaChannel), parent)
@@ -29,11 +31,12 @@ void CGLGameView::initializeGL()
 
 void CGLGameView::paintGL()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) ;
+	glClearColor(0, 0, 0, 0) ;
+	glClear(GL_COLOR_BUFFER_BIT) ;
 
 	glMatrixMode(GL_PROJECTION) ;
 	glLoadIdentity() ;
-	glOrtho(-512/2, 512/2, 512/2, -512/2, -1000, 1000);
+	glOrtho(0, m_drawSize.width(), m_drawSize.height(), 0, -1000, 1000);
 
 	glMatrixMode(GL_MODELVIEW) ;
 	glLoadIdentity() ;
@@ -50,6 +53,8 @@ void CGLGameView::paintGL()
 void CGLGameView::resizeGL(int w, int h)
 {
 	glViewport(0, 0, w, h) ;
+	m_drawSize.setWidth(w) ;
+	m_drawSize.setHeight(h) ;
 }
 
 void CGLGameView::dragEnterEvent(QDragEnterEvent *event)
@@ -92,8 +97,11 @@ void CGLGameView::dropEvent(QDropEvent *event)
 					delete p ;
 					return ;
 				}
+				QSize origSize = img.size() ;
+				util::resizeImage(img) ;
 				GLuint nObj = bindTexture(img, GL_TEXTURE_2D, GL_RGBA, QGLContext::InvertedYBindOption) ;
-				gEditData.addTexture(list[i].path, nObj) ;
+				gEditData.addTexture(list[i].path, nObj, origSize) ;
+				qDebug() << "path:" << list[i].path << " nObj:" << nObj ;
 			}
 
 			QModelIndex index = gEditData.getStageModel()->addItem(CStageTreeItem::kType_Map, name) ;
@@ -101,12 +109,24 @@ void CGLGameView::dropEvent(QDropEvent *event)
 			pItem->setAnim(p) ;
 		}
 		else {
+			if ( !gEditData.getTexture(path) ) {
+				QImage img ;
+				if ( !img.load(path) ) {
+					return ;
+				}
+				QSize origSize = img.size() ;
+				util::resizeImage(img) ;
+				GLuint nObj = bindTexture(img, GL_TEXTURE_2D, GL_RGBA, QGLContext::InvertedYBindOption) ;
+				gEditData.addTexture(path, nObj, origSize) ;
+			}
+
 			QModelIndex index = gEditData.getStageModel()->addItem(CStageTreeItem::kType_Map, name) ;
 			CStageTreeItem *pItem = gEditData.getStageModel()->getItem(index) ;
 			pItem->setImage(path) ;
 		}
 
 		event->accept() ;
+		update() ;
 		return ;
 	}
 
@@ -136,10 +156,16 @@ void CGLGameView::drawRoot(int type)
 				}
 				break ;
 			case CStageTreeItem::kDrawType_Image:
+				{
+					const GLTexture *pTex = gEditData.getTexture(p->getImagePath()) ;
+					if ( !pTex ) { continue ; }
+					QGLWidget::drawTexture(QPointF(p->getPos().x(), p->getPos().y()), pTex->nTexObj) ;
+				}
 				break ;
 		}
 	}
 }
+
 
 
 

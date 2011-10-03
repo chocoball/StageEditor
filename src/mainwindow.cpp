@@ -45,6 +45,12 @@ void MainWindow::slot_stageTreeCustomContextMenu(QPoint pos)
 	}
 }
 
+void MainWindow::slot_changeMapSize()
+{
+	m_pGlView->resize(gEditData.getMapSize()) ;
+	m_pGlView->update() ;
+}
+
 void MainWindow::closeEvent(QCloseEvent *event)
 {
 Q_UNUSED(event)
@@ -85,8 +91,11 @@ void MainWindow::addUIs()
 		}
 
 		QTabWidget *pTabWidget = new QTabWidget(this) ;
-		pTabWidget->insertTab(0, new Form_Maptab(this), "Map") ;
+		Form_Maptab *pMapTab = new Form_Maptab(this) ;
+		pTabWidget->insertTab(0, pMapTab, "Map") ;
 		pTabWidget->insertTab(1, new QWidget(this), "Object") ;
+
+		connect(pMapTab, SIGNAL(sig_changeMapSize()), this, SLOT(slot_changeMapSize())) ;
 
 		m_pSplitter->addWidget(m_pStageTree) ;
 		m_pSplitter->addWidget(pScroll) ;

@@ -19,7 +19,7 @@ void CEditData::release()
 	}
 }
 
-void CEditData::addTexture(QString path, GLuint obj)
+void CEditData::addTexture(QString path, GLuint obj, QSize origSize)
 {
 	for ( int i = 0 ; i < m_textures.size() ; i ++ ) {
 		if ( m_textures.at(i).filePath == path ) { return ; }
@@ -27,17 +27,18 @@ void CEditData::addTexture(QString path, GLuint obj)
 	GLTexture tmp ;
 	tmp.filePath = path ;
 	tmp.nTexObj = obj ;
+	tmp.origSize = origSize ;
 	m_textures.append(tmp) ;
 }
 
-GLuint CEditData::getTexture(QString path)
+const GLTexture *CEditData::getTexture(QString path)
 {
 	for ( int i = 0 ; i < m_textures.size() ; i ++ ) {
 		if ( m_textures.at(i).filePath == path ) {
-			return m_textures[i].nTexObj ;
+			return &m_textures[i] ;
 		}
 	}
-	return 0 ;
+	return NULL ;
 }
 
 

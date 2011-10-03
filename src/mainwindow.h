@@ -21,6 +21,7 @@ public:
 
 public slots:
 	void slot_stageTreeCustomContextMenu(QPoint pos) ;
+	void slot_changeMapSize() ;
 
 signals:
 	void sig_keyPress(QKeyEvent *) ;

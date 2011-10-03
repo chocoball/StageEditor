@@ -20,6 +20,12 @@ public slots:
 	void slot_clickedAdd() ;
 	void slot_clickedDel() ;
 
+	void slot_changeMapW(int val) ;
+	void slot_changeMapH(int val) ;
+
+signals:
+	void sig_changeMapSize() ;
+
 protected:
 
 private:

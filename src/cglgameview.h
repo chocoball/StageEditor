@@ -25,6 +25,8 @@ protected:
 
 	void drawRoot(int type) ;
 
+private:
+	QSize		m_drawSize ;
 } ;
 
 #endif // CGLGAMEVIEW_H
