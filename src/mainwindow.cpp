@@ -34,7 +34,7 @@ void MainWindow::slot_stageTreeCustomContextMenu(QPoint pos)
 	QModelIndex index = m_pStageTree->indexAt(pos) ;
 	if ( !index.isValid() ) { return ; }
 
-	int type = gEditData.getModel()->getType(index) ;
+	int type = gEditData.getStageModel()->getType(index) ;
 	switch ( type ) {
 		case CStageTreeItem::kType_Map:
 			break ;
@@ -69,7 +69,7 @@ void MainWindow::addUIs()
 	pLayout->addWidget(m_pSplitter) ;
 	{
 		m_pStageTree = new QTreeView(this) ;
-		m_pStageTree->setModel(gEditData.getModel()) ;
+		m_pStageTree->setModel(gEditData.getStageModel()) ;
 		m_pStageTree->setMinimumSize(100, 300) ;
 		m_pStageTree->setHeaderHidden(true) ;
 		connect(m_pStageTree, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slot_stageTreeCustomContextMenu(QPoint))) ;

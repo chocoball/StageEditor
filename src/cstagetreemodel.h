@@ -27,6 +27,7 @@ public:
 	void removeItem(const QModelIndex &index) ;
 
 	int getType(const QModelIndex &index) ;
+	QModelIndex getIndex(int type) ;
 
 signals:
 

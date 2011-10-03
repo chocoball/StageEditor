@@ -20,10 +20,11 @@ public:
 	QString getFilePath() { return QString(qApp->applicationDirPath() + "/settnig.ini") ; }
 	QSettings::Format getFileFormat() { return QSettings::IniFormat ; }
 
-	kAccessor(QByteArray, m_mainWindowState, MainWindowState)
-	kAccessor(QByteArray, m_mainWindowGeometry, MainWindowGeometry)
-	kAccessor(QByteArray, m_splitterState, SplitterState)
-	kAccessor(QByteArray, m_splitterGeometry, SplitterGeometry)
+	kAccessor(QByteArray,	m_mainWindowState,		MainWindowState)
+	kAccessor(QByteArray,	m_mainWindowGeometry,	MainWindowGeometry)
+	kAccessor(QByteArray,	m_splitterState,		SplitterState)
+	kAccessor(QByteArray,	m_splitterGeometry,		SplitterGeometry)
+	kAccessor(QString,		m_mapOpenDir,			MapOpenDir)
 
 private:
 	CSetting() {}

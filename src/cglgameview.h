@@ -9,6 +9,8 @@ class CGLGameView : public QGLWidget
 public:
 	explicit CGLGameView(QWidget *parent = 0) ;
 
+	void releaseTextures() ;
+
 signals:
 
 public slots:
@@ -19,6 +21,10 @@ protected:
 	void resizeGL(int w, int h) ;
 	void dragEnterEvent(QDragEnterEvent *event) ;
 	void dropEvent(QDropEvent *event) ;
+	void closeEvent(QCloseEvent *event) ;
+
+	void drawRoot(int type) ;
+
 } ;
 
 #endif // CGLGAMEVIEW_H

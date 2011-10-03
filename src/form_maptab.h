@@ -5,22 +5,25 @@
 #include <QResizeEvent>
 
 namespace Ui {
-    class Form_Maptab;
+	class Form_Maptab ;
 }
 
 class Form_Maptab : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit Form_Maptab(QWidget *parent = 0);
-    ~Form_Maptab();
+	explicit Form_Maptab(QWidget *parent = 0) ;
+	~Form_Maptab() ;
+
+public slots:
+	void slot_clickedAdd() ;
+	void slot_clickedDel() ;
 
 protected:
-	void resizeEvent(QResizeEvent *event) ;
 
 private:
-    Ui::Form_Maptab *ui;
-};
+	Ui::Form_Maptab *ui ;
+} ;
 
 #endif // FORM_MAPTAB_H

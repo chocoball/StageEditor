@@ -2,8 +2,15 @@
 #define CEDITDATA_H
 
 #include <QTreeView>
+#include <GL/gl.h>
 #include "include.h"
 #include "cstagetreemodel.h"
+#include "cmaplistmodel.h"
+
+typedef struct {
+	QString		filePath ;
+	GLuint		nTexObj ;
+} GLTexture ;
 
 class CEditData
 {
@@ -17,7 +24,12 @@ public:
 	void initialize() ;
 	void release() ;
 
-	CStageTreeModel *getModel() { return m_pStageModel ; }
+	void addTexture(QString path, GLuint obj) ;
+	GLuint getTexture(QString path) ;
+	QList<GLTexture> &getTextureList() { return m_textures ; }
+
+	CStageTreeModel	*getStageModel()	{ return m_pStageModel ; }
+	CMapListModel	*getMapModel()		{ return m_pMapModel ; }
 
 	QModelIndex getStageSelIndex()
 	{
@@ -32,12 +44,15 @@ private:
 	{
 		m_pStageTreeView = NULL ;
 		m_pStageModel = NULL ;
+		m_pMapModel = NULL ;
 	}
 
-	~CEditData()	{}
+	~CEditData() {}
 	CEditData &operator =(CEditData &rhs) ;
 
-	CStageTreeModel	*m_pStageModel ;
+	CStageTreeModel		*m_pStageModel ;
+	CMapListModel		*m_pMapModel ;
+	QList<GLTexture>	m_textures ;
 } ;
 
 #define gEditData CEditData::getInstance()

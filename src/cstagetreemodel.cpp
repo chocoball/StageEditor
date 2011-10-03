@@ -143,11 +143,30 @@ int CStageTreeModel::getType(const QModelIndex &index)
 	return p->getType() ;
 }
 
+QModelIndex CStageTreeModel::getIndex(int type)
+{
+	for ( int i = 0 ; i < m_pRootItem->childCount() ; i ++ ) {
+		CStageTreeItem *p = m_pRootItem->child(i) ;
+		if ( p->getType() == type ) { return p->getIndex() ; }
+	}
+	return QModelIndex() ;
+}
+
+
 void CStageTreeModel::updateIndex(CStageTreeItem *p, int row, QModelIndex parent)
 {
-	p->setIndex(this->index(0, 0, parent)) ;
+	if ( p->parent() ) {
+		p->setIndex(createIndex(row, 0, p)) ;
+	}
+	else {
+		p->setIndex(QModelIndex()) ;
+	}
 	for ( int i = 0 ; i < p->childCount() ; i ++ ) {
 		updateIndex(p->child(i), i, p->getIndex()) ;
 	}
 }
+
+
+
+
 

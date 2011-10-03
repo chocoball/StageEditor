@@ -6,6 +6,7 @@
 #include <QVariant>
 
 #include "include.h"
+#include "canm2d.h"
 
 class CStageTreeItem
 {
@@ -16,7 +17,11 @@ public:
 		kType_MapRoot,
 		kType_Map,
 		kType_ObjectRoot,
-		kType_Object
+		kType_Object,
+
+		kDrawType_None	= -1,
+		kDrawType_Anm	= 0,
+		kDrawType_Image
 	} ;
 
 public:
@@ -32,6 +37,9 @@ public:
 
 	CStageTreeItem *getChild(int type) ;
 
+	void setAnim(CAnm2DXml *p) ;
+	void setImage(QString path) ;
+
 	int childCount() { return m_pChildren.size() ; }
 	CStageTreeItem *child(int row)
 	{
@@ -42,7 +50,11 @@ public:
 	CStageTreeItem *parent() { return m_pParent ; }
 
 	kAccessor(int, m_type, Type)
+	kAccessor(int, m_drawType, DrawType)
 	kAccessor(QModelIndex, m_index, Index)
+	kAccessor(CAnm2D*, m_pAnm, AnmPtr)
+	kAccessor(QString, m_imagePath, ImagePath)
+	kAccessor(QPoint, m_pos, Pos)
 
 private:
 	QString					m_name ;

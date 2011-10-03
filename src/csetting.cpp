@@ -1,11 +1,16 @@
 #include "csetting.h"
 
+#define kKeyMapOpenDir	"map_open_dir"
 #define kKeyGeometry	"geometry"
 #define kKeyState		"state"
 
 void CSetting::read()
 {
 	QSettings settings(getFilePath(), getFileFormat()) ;
+
+	settings.beginGroup("Global") ;
+	setMapOpenDir(settings.value(kKeyMapOpenDir).toString()) ;
+	settings.endGroup() ;
 
 	settings.beginGroup("MainWindow") ;
 	setMainWindowGeometry(settings.value(kKeyGeometry).toByteArray()) ;
@@ -21,6 +26,10 @@ void CSetting::read()
 void CSetting::write()
 {
 	QSettings settings(getFilePath(), getFileFormat()) ;
+
+	settings.beginGroup("Global") ;
+	settings.setValue(kKeyMapOpenDir, getMapOpenDir()) ;
+	settings.endGroup() ;
 
 	settings.beginGroup("MainWindow") ;
 	settings.setValue(kKeyGeometry, getMainWindowGeometry()) ;

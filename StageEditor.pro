@@ -17,7 +17,9 @@ SOURCES		+=	src/main.cpp			\
 				src/cstagetreemodel.cpp	\
 				src/cstagetreeitem.cpp	\
 				src/cglgameview.cpp		\
-				src/form_maptab.cpp
+				src/form_maptab.cpp		\
+				src/cmaplistmodel.cpp	\
+				src/canm2d.cpp
 
 HEADERS		+=	src/mainwindow.h		\
 				src/csetting.h			\
@@ -26,11 +28,18 @@ HEADERS		+=	src/mainwindow.h		\
 				src/cstagetreemodel.h	\
 				src/cstagetreeitem.h	\
 				src/cglgameview.h		\
-				src/form_maptab.h
+				src/form_maptab.h		\
+				src/cmaplistmodel.h		\
+				src/canm2d.h			\
+				src/framedata.h
 
 FORMS		+=	ui/mainwindow.ui		\
 				ui/form_mock.ui			\
 				ui/form_maptab.ui
+
+
+
+
 
 
 
