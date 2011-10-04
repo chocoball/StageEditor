@@ -11,6 +11,7 @@ typedef struct {
 	QString		filePath ;
 	GLuint		nTexObj ;
 	QSize		origSize ;
+	QSize		imgSize ;
 } GLTexture ;
 
 class CEditData
@@ -25,7 +26,7 @@ public:
 	void initialize() ;
 	void release() ;
 
-	void addTexture(QString path, GLuint obj, QSize origSize) ;
+	void addTexture(QString path, GLuint obj, const QSize &origSize, const QSize &imgSize) ;
 	const GLTexture *getTexture(QString path) ;
 	QList<GLTexture> &getTextureList() { return m_textures ; }
 

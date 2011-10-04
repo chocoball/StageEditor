@@ -19,7 +19,7 @@ void CEditData::release()
 	}
 }
 
-void CEditData::addTexture(QString path, GLuint obj, QSize origSize)
+void CEditData::addTexture(QString path, GLuint obj, const QSize &origSize, const QSize &imgSize)
 {
 	for ( int i = 0 ; i < m_textures.size() ; i ++ ) {
 		if ( m_textures.at(i).filePath == path ) { return ; }
@@ -28,6 +28,7 @@ void CEditData::addTexture(QString path, GLuint obj, QSize origSize)
 	tmp.filePath = path ;
 	tmp.nTexObj = obj ;
 	tmp.origSize = origSize ;
+	tmp.imgSize = imgSize ;
 	m_textures.append(tmp) ;
 }
 

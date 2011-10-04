@@ -84,6 +84,10 @@ void CAnm2D::renderOpenGL_Layer(AnmLayer *pLayer, int frame)
 		QMatrix4x4 mat = pLayer->getDisplayMatrix(frame) ;
 		renderOpenGL_FrameData(d, mat) ;
 	}
+
+	for ( int i = 0 ; i < pLayer->childPtrs.size() ; i ++ ) {
+		renderOpenGL_Layer(pLayer->childPtrs[i], frame) ;
+	}
 }
 
 void CAnm2D::renderOpenGL_FrameData(const FrameData &data, QMatrix4x4 mat)
@@ -111,10 +115,12 @@ void CAnm2D::renderOpenGL_FrameData(const FrameData &data, QMatrix4x4 mat)
 		rect.setTop(v.y0);
 		rect.setBottom(v.y1);
 
-		uvF.setLeft((float)uv.left()/pImage->origSize.width());
-		uvF.setRight((float)uv.right()/pImage->origSize.width());
-		uvF.setTop((float)(pImage->origSize.height()-uv.top())/pImage->origSize.height());
-		uvF.setBottom((float)(pImage->origSize.height()-uv.bottom())/pImage->origSize.height());
+		int w = pTex->imgSize.width() ;
+		int h = pTex->imgSize.height() ;
+		uvF.setLeft((float)uv.left()/w);
+		uvF.setRight((float)uv.right()/w);
+		uvF.setTop(1.0f-(float)uv.top()/(float)h);
+		uvF.setBottom(1.0f-(float)uv.bottom()/(float)h);
 
 		glBindTexture(GL_TEXTURE_2D, pTex->nTexObj) ;
 

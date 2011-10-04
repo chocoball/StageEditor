@@ -100,7 +100,7 @@ void CGLGameView::dropEvent(QDropEvent *event)
 				QSize origSize = img.size() ;
 				util::resizeImage(img) ;
 				GLuint nObj = bindTexture(img, GL_TEXTURE_2D, GL_RGBA, QGLContext::InvertedYBindOption) ;
-				gEditData.addTexture(list[i].path, nObj, origSize) ;
+				gEditData.addTexture(list[i].path, nObj, origSize, img.size()) ;
 				qDebug() << "path:" << list[i].path << " nObj:" << nObj ;
 			}
 
@@ -117,7 +117,7 @@ void CGLGameView::dropEvent(QDropEvent *event)
 				QSize origSize = img.size() ;
 				util::resizeImage(img) ;
 				GLuint nObj = bindTexture(img, GL_TEXTURE_2D, GL_RGBA, QGLContext::InvertedYBindOption) ;
-				gEditData.addTexture(path, nObj, origSize) ;
+				gEditData.addTexture(path, nObj, origSize, img.size()) ;
 			}
 
 			QModelIndex index = gEditData.getStageModel()->addItem(CStageTreeItem::kType_Map, name) ;
