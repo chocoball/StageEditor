@@ -147,6 +147,8 @@ public:
 	QList<AnmImage> &getImages() { return m_images ; }
 	virtual bool load(const QString &fileName) = 0 ;
 
+	QRect getRect() { return m_rect ; }
+
 protected:
 	void convMat(double *ret, const QMatrix4x4 &mat) ;
 	AnmImage *getImage(int no) ;
@@ -154,6 +156,9 @@ protected:
 	void renderOpenGL_Layer(AnmLayer *pLayer, int frame) ;
 	void renderOpenGL_FrameData(const FrameData &data, QMatrix4x4 mat) ;
 	void drawRect(QRectF rc, QRectF uv, float z, QColor col) ;
+
+	void setRect() ;
+	void setRect(AnmLayer *pLayer) ;
 
 	// srcからdestへの相対パスを絶対パスに変換
 	QString getAbsolutePath(QString &src, QString &dest)
@@ -169,6 +174,7 @@ protected:
 protected:
 	QList<AnmObject *>	m_objPtrs ;
 	QList<AnmImage>		m_images ;
+	QRect				m_rect ;
 } ;
 
 

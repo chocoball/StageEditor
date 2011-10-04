@@ -40,6 +40,8 @@ public:
 	void setAnim(CAnm2DXml *p) ;
 	void setImage(QString path) ;
 
+	CStageTreeItem *isContain(const QPoint &pos) ;
+
 	int childCount() { return m_pChildren.size() ; }
 	CStageTreeItem *child(int row)
 	{

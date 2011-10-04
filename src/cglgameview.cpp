@@ -9,6 +9,7 @@ CGLGameView::CGLGameView(QWidget *parent) :
 	QGLWidget(QGLFormat(QGL::AlphaChannel), parent)
 {
 	setAcceptDrops(true) ;
+	m_editMode = kEditMode_None ;
 }
 
 void CGLGameView::releaseTextures()
@@ -107,6 +108,7 @@ void CGLGameView::dropEvent(QDropEvent *event)
 			QModelIndex index = gEditData.getStageModel()->addItem(CStageTreeItem::kType_Map, name) ;
 			CStageTreeItem *pItem = gEditData.getStageModel()->getItem(index) ;
 			pItem->setAnim(p) ;
+			pItem->setPos(event->pos()) ;
 		}
 		else {
 			if ( !gEditData.getTexture(path) ) {
@@ -123,6 +125,7 @@ void CGLGameView::dropEvent(QDropEvent *event)
 			QModelIndex index = gEditData.getStageModel()->addItem(CStageTreeItem::kType_Map, name) ;
 			CStageTreeItem *pItem = gEditData.getStageModel()->getItem(index) ;
 			pItem->setImage(path) ;
+			pItem->setPos(event->pos()) ;
 		}
 
 		event->accept() ;
@@ -139,6 +142,62 @@ void CGLGameView::closeEvent(QCloseEvent *event)
 	event->accept() ;
 }
 
+void CGLGameView::mousePressEvent(QMouseEvent *event)
+{
+	m_editMode = kEditMode_None ;
+	if ( event->button() == Qt::LeftButton ) {
+		CStageTreeItem *pItem ;
+		int type[2] = {
+			CStageTreeItem::kType_ObjectRoot,
+			CStageTreeItem::kType_MapRoot
+		} ;
+		for ( int i = 0 ; i < 2 ; i ++ ) {
+			pItem = isContain(type[i], event->pos()) ;
+			if ( pItem ) {
+				m_pPressItem = pItem ;
+
+				m_editMode = kEditMode_Normal ;
+				m_oldItemPos = m_pPressItem->getPos() ;
+				m_oldMousePos = event->pos() ;
+
+				gEditData.getStageTreeView()->setCurrentIndex(m_pPressItem->getIndex()) ;
+				event->accept() ;
+				update() ;
+				return ;
+			}
+		}
+	}
+	event->ignore() ;
+}
+
+void CGLGameView::mouseMoveEvent(QMouseEvent *event)
+{
+	switch ( m_editMode ) {
+		case kEditMode_Normal:
+			{
+				QPoint pos = event->pos() - m_oldMousePos + m_pPressItem->getPos() ;
+				m_pPressItem->setPos(pos) ;
+
+				m_oldMousePos = event->pos() ;
+			}
+			update() ;
+			break ;
+	}
+}
+
+void CGLGameView::mouseReleaseEvent(QMouseEvent *event)
+{
+	switch ( m_editMode ) {
+		case kEditMode_Normal:
+			if ( m_oldItemPos != m_pPressItem->getPos() ) {
+				// TODO:編集コマンド
+			}
+			break ;
+	}
+	m_editMode = kEditMode_None ;
+}
+
+
 void CGLGameView::drawRoot(int type)
 {
 	QModelIndex index = gEditData.getStageModel()->getIndex(type) ;
@@ -152,7 +211,18 @@ void CGLGameView::drawRoot(int type)
 				{
 					CAnm2D *pAnm = p->getAnmPtr() ;
 
-					pAnm->renderOpenGL(0) ;
+					glPushMatrix();
+					{
+						QPoint pos = p->getPos() ;
+						glTranslatef((GLfloat)pos.x(), (GLfloat)pos.y(), 0.0f);
+						pAnm->renderOpenGL(0) ;
+
+						if ( p->getIndex() == gEditData.getStageSelIndex() ) {
+							qDebug() << "rect:" << pAnm->getRect() ;
+							drawFrame(pAnm->getRect(), QColor(255, 0, 0)) ;
+						}
+					}
+					glPopMatrix();
 				}
 				break ;
 			case CStageTreeItem::kDrawType_Image:
@@ -166,7 +236,41 @@ void CGLGameView::drawRoot(int type)
 	}
 }
 
+// ライン描画
+void CGLGameView::drawLine(const QPoint &pos0, const QPoint &pos1, const QColor &col)
+{
+	glColor4ub(col.red(), col.green(), col.blue(), col.alpha());
 
+	glBegin(GL_LINES) ;
+	glVertex2f(pos0.x(), pos0.y()) ;
+	glVertex2f(pos1.x(), pos1.y()) ;
+	glEnd() ;
+}
 
+void CGLGameView::drawFrame(const QRect &rect, const QColor &col)
+{
+	bool bTex = glIsEnabled(GL_TEXTURE_2D) ;
+	glDisable(GL_TEXTURE_2D) ;
+
+	drawLine(QPoint(rect.left(), rect.top()), QPoint(rect.left(), rect.bottom()), col);
+	drawLine(QPoint(rect.right(), rect.top()), QPoint(rect.right(), rect.bottom()), col);
+	drawLine(QPoint(rect.left(), rect.top()), QPoint(rect.right(), rect.top()), col);
+	drawLine(QPoint(rect.left(), rect.bottom()), QPoint(rect.right(), rect.bottom()), col);
+
+	if ( bTex ) { glEnable(GL_TEXTURE_2D) ; }
+}
+
+CStageTreeItem *CGLGameView::isContain(int type, const QPoint &pos)
+{
+	CStageTreeModel *pModel = gEditData.getStageModel() ;
+	QModelIndex index ;
+	CStageTreeItem *pItem ;
+	index = pModel->getIndex(type) ;
+	pItem = pModel->getItem(index) ;
+	if ( index.isValid() && pItem ) {
+		return pItem->isContain(pos) ;
+	}
+	return NULL ;
+}
 
 

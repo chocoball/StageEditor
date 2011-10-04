@@ -117,18 +117,18 @@ void CAnm2D::renderOpenGL_FrameData(const FrameData &data, QMatrix4x4 mat)
 
 		int w = pTex->imgSize.width() ;
 		int h = pTex->imgSize.height() ;
-		uvF.setLeft((float)uv.left()/w);
-		uvF.setRight((float)uv.right()/w);
-		uvF.setTop(1.0f-(float)uv.top()/(float)h);
-		uvF.setBottom(1.0f-(float)uv.bottom()/(float)h);
+		uvF.setLeft((float)uv.left()/w) ;
+		uvF.setRight((float)uv.right()/w) ;
+		uvF.setTop(1.0f-(float)uv.top()/h) ;
+		uvF.setBottom(1.0f-(float)uv.bottom()/h) ;
 
 		glBindTexture(GL_TEXTURE_2D, pTex->nTexObj) ;
 
 		QColor col ;
-		col.setRed(   data.rgba[0] );
-		col.setGreen( data.rgba[1] );
-		col.setBlue(  data.rgba[2] );
-		col.setAlpha( data.rgba[3] );
+		col.setRed(data.rgba[0]);
+		col.setGreen(data.rgba[1]);
+		col.setBlue(data.rgba[2]);
+		col.setAlpha(data.rgba[3]);
 
 		drawRect(rect, uvF, 0, col) ;
 	}
@@ -151,7 +151,39 @@ void CAnm2D::drawRect(QRectF rc, QRectF uv, float z, QColor col)
 	glEnd() ;
 }
 
+void CAnm2D::setRect()
+{
+	m_rect = QRect(0, 0, 0, 0) ;
+	for ( int i = 0 ; i < m_objPtrs.size() ; i ++ ) {
+		AnmObject *pObj = m_objPtrs[i] ;
 
+		for ( int j = 0 ; j < pObj->layerPtrs.size() ; j ++ ) {
+			setRect(pObj->layerPtrs[j]) ;
+		}
+	}
+}
+
+void CAnm2D::setRect(AnmLayer *pLayer)
+{
+	bool valid0, valid1 ;
+	FrameData data = pLayer->getDisplayFrameData(0, &valid0) ;
+	QMatrix4x4 mat = pLayer->getDisplayMatrix(0, &valid1) ;
+	if ( valid0 && valid1 ) {
+		QVector3D v[4] ;
+		data.getVertexApplyMatrix(v, mat) ;
+
+		for ( int i = 0 ; i < 4 ; i ++ ) {
+			if ( m_rect.left() > v[i].x() ) { m_rect.setLeft(v[i].x()) ; }
+			if ( m_rect.right() < v[i].x() ) { m_rect.setRight(v[i].x()) ; }
+			if ( m_rect.top() > v[i].y() ) { m_rect.setTop(v[i].y()) ; }
+			if ( m_rect.bottom() < v[i].y() ) { m_rect.setBottom(v[i].y()) ; }
+		}
+	}
+
+	for ( int i = 0 ; i < pLayer->childPtrs.size() ; i ++ ) {
+		setRect(pLayer->childPtrs[i]) ;
+	}
+}
 
 // ------------------------------------------------------
 // XML
@@ -183,6 +215,7 @@ bool CAnm2DXml::load(const QString &fileName)
 		releaseAll() ;
 		return false ;
 	}
+	setRect() ;
 	return true ;
 }
 

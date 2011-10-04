@@ -51,6 +51,11 @@ void MainWindow::slot_changeMapSize()
 	m_pGlView->update() ;
 }
 
+void MainWindow::slot_clickStageTree(QModelIndex)
+{
+	m_pGlView->update() ;
+}
+
 void MainWindow::closeEvent(QCloseEvent *event)
 {
 Q_UNUSED(event)
@@ -79,6 +84,7 @@ void MainWindow::addUIs()
 		m_pStageTree->setMinimumSize(100, 300) ;
 		m_pStageTree->setHeaderHidden(true) ;
 		connect(m_pStageTree, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slot_stageTreeCustomContextMenu(QPoint))) ;
+		connect(m_pStageTree, SIGNAL(clicked(QModelIndex)), this, SLOT(slot_clickStageTree(QModelIndex))) ;
 		gEditData.setStageTreeView(m_pStageTree) ;
 
 		QScrollArea *pScroll = new QScrollArea(this) ;

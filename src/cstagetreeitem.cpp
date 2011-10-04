@@ -1,4 +1,5 @@
 #include "cstagetreeitem.h"
+#include "ceditdata.h"
 
 CStageTreeItem::CStageTreeItem(CStageTreeItem *parent)
 {
@@ -85,6 +86,40 @@ void CStageTreeItem::setImage(QString path)
 	setImagePath(path) ;
 	setDrawType(kDrawType_Image) ;
 }
+
+CStageTreeItem *CStageTreeItem::isContain(const QPoint &pos)
+{
+	for ( int i = 0 ; i < childCount() ; i ++ ) {
+		CStageTreeItem *p = child(i) ;
+		switch ( p->getDrawType() ) {
+			case kDrawType_Anm:
+				if ( !p->getAnmPtr() ) { continue ; }
+
+				{
+					QRect r = p->getAnmPtr()->getRect() ;
+					r.moveTo(p->getPos()) ;
+					if ( r.contains(pos) ) {
+						return p ;
+					}
+				}
+				break ;
+			case kDrawType_Image:
+				{
+					const GLTexture *pTex = gEditData.getTexture(p->getImagePath()) ;
+					if ( !pTex ) { continue ; }
+					QRect r = QRect(0, 0, pTex->origSize.width(), pTex->origSize.height()) ;
+					r.moveTo(p->getPos()) ;
+					if ( r.contains(pos) ) {
+						return p ;
+					}
+				}
+				break ;
+		}
+	}
+	return NULL ;
+}
+
+
 
 
 

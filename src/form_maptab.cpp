@@ -35,11 +35,12 @@ void Form_Maptab::slot_clickedAdd()
 	QStringList fileNames = QFileDialog::getOpenFileNames(this,
 														  trUtf8("開く"),
 														  gSetting.getMapOpenDir(),
-														  tr("All Files (*);;PNG Files (*.png);")) ;
+														  tr("All Files (*.png *.xml);;PNG Files (*.png);")) ;
 	if ( fileNames.size() <= 0 ) { return ; }
 
 	gSetting.setMapOpenDir(fileNames[0]) ;
 
+	// TODO:追加コマンドにする ==========================
 	CMapListModel *pModel = gEditData.getMapModel() ;
 	int row = pModel->rowCount() ;
 	pModel->insertRows(row, fileNames.size()) ;
@@ -58,6 +59,7 @@ void Form_Maptab::slot_clickedAdd()
 		pModel->setData(index, fileName, Qt::UserRole) ;
 		pModel->setPixmap(index, QPixmap::fromImage(img));
 	}
+	// ============================================
 }
 
 void Form_Maptab::slot_clickedDel()
