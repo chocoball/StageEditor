@@ -1,10 +1,11 @@
 #include "ceditdata.h"
-
+#include "command.h"
 
 void CEditData::initialize()
 {
-	m_pStageModel = new CStageTreeModel() ;
-	m_pMapModel = new CMapListModel() ;
+	m_pStageModel	= new CStageTreeModel() ;
+	m_pMapModel		= new CMapListModel() ;
+	m_pUndoStack	= new QUndoStack() ;
 }
 
 void CEditData::release()
@@ -16,6 +17,10 @@ void CEditData::release()
 	if ( m_pMapModel ) {
 		delete m_pMapModel ;
 		m_pMapModel = NULL ;
+	}
+	if ( m_pUndoStack ) {
+		delete m_pUndoStack ;
+		m_pUndoStack = NULL ;
 	}
 }
 
@@ -42,5 +47,14 @@ const GLTexture *CEditData::getTexture(QString path)
 	return NULL ;
 }
 
+void CEditData::cmd_moveItem(const QModelIndex &index, const QPoint &oldPos, QList<QWidget *> &updateWidget)
+{
+	m_pUndoStack->push(new Command_MoveItem(getStageModel()->getAbsoluteRow(index), oldPos, updateWidget)) ;
+}
+
+void CEditData::cmd_addMapData(const QStringList &fileNames)
+{
+	m_pUndoStack->push(new Command_AddMapData(fileNames)) ;
+}
 
 

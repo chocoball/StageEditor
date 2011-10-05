@@ -24,6 +24,9 @@ public:
 	kAccessor(QByteArray,	m_mainWindowGeometry,	MainWindowGeometry)
 	kAccessor(QByteArray,	m_splitterState,		SplitterState)
 	kAccessor(QByteArray,	m_splitterGeometry,		SplitterGeometry)
+	kAccessor(QByteArray,	m_gameViewGeometry,		GameViewGeometry)
+	kAccessor(QByteArray,	m_gameSplitterGeometry,	GameSplitterGeometry)
+	kAccessor(QByteArray,	m_gameSplitterState,	GameSplitterState)
 	kAccessor(QString,		m_mapOpenDir,			MapOpenDir)
 
 private:

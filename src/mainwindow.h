@@ -5,7 +5,8 @@
 #include <QSplitter>
 #include <QTreeView>
 #include <QModelIndex>
-#include "cglgameview.h"
+#include "form_gamedetail.h"
+
 
 namespace Ui {
 	class MainWindow ;
@@ -21,8 +22,6 @@ public:
 
 public slots:
 	void slot_stageTreeCustomContextMenu(QPoint pos) ;
-	void slot_changeMapSize() ;
-	void slot_clickStageTree(QModelIndex) ;
 
 signals:
 	void sig_keyPress(QKeyEvent *) ;
@@ -41,8 +40,8 @@ private:
 private:
 	Ui::MainWindow	*ui ;
 
+	Form_GameDetail *m_pGameView ;
 	QSplitter		*m_pSplitter ;
-	CGLGameView		*m_pGlView ;
 	QTreeView		*m_pStageTree ;
 } ;
 

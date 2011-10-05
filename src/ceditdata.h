@@ -3,6 +3,7 @@
 
 #include <QTreeView>
 #include <GL/gl.h>
+#include <QUndoStack>
 #include "include.h"
 #include "cstagetreemodel.h"
 #include "cmaplistmodel.h"
@@ -30,8 +31,12 @@ public:
 	const GLTexture *getTexture(QString path) ;
 	QList<GLTexture> &getTextureList() { return m_textures ; }
 
+	void cmd_moveItem(const QModelIndex &index, const QPoint &oldPos, QList<QWidget *> &updateWidget) ;
+	void cmd_addMapData(const QStringList &fileNames) ;
+
 	CStageTreeModel	*getStageModel()	{ return m_pStageModel ; }
 	CMapListModel	*getMapModel()		{ return m_pMapModel ; }
+	QUndoStack		*getUndoStack()		{ return m_pUndoStack ; }
 
 	QModelIndex getStageSelIndex()
 	{
@@ -55,6 +60,7 @@ private:
 
 	CStageTreeModel		*m_pStageModel ;
 	CMapListModel		*m_pMapModel ;
+	QUndoStack			*m_pUndoStack ;
 	QList<GLTexture>	m_textures ;
 } ;
 

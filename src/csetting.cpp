@@ -21,6 +21,15 @@ void CSetting::read()
 	setSplitterGeometry(settings.value(kKeyGeometry).toByteArray()) ;
 	setSplitterState(settings.value(kKeyState).toByteArray()) ;
 	settings.endGroup() ;
+
+	settings.beginGroup("GameView") ;
+	setGameViewGeometry(settings.value(kKeyGeometry).toByteArray()) ;
+	settings.endGroup() ;
+
+	settings.beginGroup("GameViewSplitter") ;
+	setGameSplitterGeometry(settings.value(kKeyGeometry).toByteArray()) ;
+	setGameSplitterState(settings.value(kKeyState).toByteArray()) ;
+	settings.endGroup() ;
 }
 
 void CSetting::write()
@@ -39,5 +48,14 @@ void CSetting::write()
 	settings.beginGroup("Splitter") ;
 	settings.value(kKeyGeometry, getSplitterGeometry()) ;
 	settings.setValue(kKeyState, getSplitterState()) ;
+	settings.endGroup() ;
+
+	settings.beginGroup("GameView") ;
+	settings.setValue(kKeyGeometry, getGameViewGeometry()) ;
+	settings.endGroup() ;
+
+	settings.beginGroup("GameViewSplitter") ;
+	settings.setValue(kKeyGeometry, getGameSplitterGeometry()) ;
+	settings.setValue(kKeyState, getGameSplitterState()) ;
 	settings.endGroup() ;
 }

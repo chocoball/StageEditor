@@ -18,6 +18,7 @@ public:
 	void releaseTextures() ;
 
 signals:
+	void sig_changePos(QPoint) ;
 
 public slots:
 

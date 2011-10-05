@@ -22,6 +22,7 @@ public:
 	QModelIndex parent(const QModelIndex &child) const ;
 
 	CStageTreeItem *getItem(const QModelIndex &index) const ;
+	CStageTreeItem *getItem(int absoluteRow) ;
 
 	QModelIndex addItem(int type, QString name) ;
 	void removeItem(const QModelIndex &index) ;
@@ -29,12 +30,16 @@ public:
 	int getType(const QModelIndex &index) ;
 	QModelIndex getIndex(int type) ;
 
+	int getAbsoluteRow(const QModelIndex &index) ;
+
 signals:
 
 public slots:
 
 private:
 	void updateIndex(CStageTreeItem *p, int row, QModelIndex parent) ;
+	int getAbsoluteRow(CStageTreeItem *pRoot, CStageTreeItem *p, int *pRow) ;
+	CStageTreeItem *getItem(CStageTreeItem *pRoot, int row, int *pCurrRow) ;
 
 private:
 	CStageTreeItem	*m_pRootItem ;

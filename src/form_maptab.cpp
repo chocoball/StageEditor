@@ -40,26 +40,7 @@ void Form_Maptab::slot_clickedAdd()
 
 	gSetting.setMapOpenDir(fileNames[0]) ;
 
-	// TODO:追加コマンドにする ==========================
-	CMapListModel *pModel = gEditData.getMapModel() ;
-	int row = pModel->rowCount() ;
-	pModel->insertRows(row, fileNames.size()) ;
-	for ( int i = 0 ; i < fileNames.size() ; i ++ ) {
-		QModelIndex index = pModel->index(row+i) ;
-		QString fileName = fileNames[i] ;
-		QString baseName = fileName ;
-		QStringList tmp = fileName.split("/") ;
-		if ( tmp.size() ) {
-			baseName = tmp[tmp.size()-1] ;
-		}
-		QImage img ;
-		img.load(fileName) ;
-
-		pModel->setData(index, baseName, Qt::DisplayRole) ;
-		pModel->setData(index, fileName, Qt::UserRole) ;
-		pModel->setPixmap(index, QPixmap::fromImage(img));
-	}
-	// ============================================
+	gEditData.cmd_addMapData(fileNames) ;
 }
 
 void Form_Maptab::slot_clickedDel()
@@ -68,7 +49,7 @@ void Form_Maptab::slot_clickedDel()
 	if ( !index.isValid() ) { return ; }
 
 	CMapListModel *pModel = gEditData.getMapModel() ;
-	pModel->removeRows(index.row(), 1) ;
+	pModel->removeRows(index.row(), 1) ;		// TODO:コマンドにする
 }
 
 void Form_Maptab::slot_changeMapW(int val)
@@ -89,3 +70,7 @@ void Form_Maptab::slot_changeMapH(int val)
 	emit sig_changeMapSize() ;
 }
 
+void Form_Maptab::resizeEvent(QResizeEvent *)
+{
+
+}

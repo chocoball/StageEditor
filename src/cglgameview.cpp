@@ -77,6 +77,7 @@ void CGLGameView::dropEvent(QDropEvent *event)
 		QDataStream stream( &itemData, QIODevice::ReadOnly ) ;
 		stream >> path ;
 
+		// TODO:コマンドにする ===================================
 		QString name = path ;
 		QStringList tmp = path.split("/") ;
 		if ( tmp.size() > 0 ) {
@@ -127,9 +128,10 @@ void CGLGameView::dropEvent(QDropEvent *event)
 			pItem->setImage(path) ;
 			pItem->setPos(event->pos()) ;
 		}
+		update() ;
+		// ==================================================
 
 		event->accept() ;
-		update() ;
 		return ;
 	}
 
@@ -163,6 +165,8 @@ void CGLGameView::mousePressEvent(QMouseEvent *event)
 				gEditData.getStageTreeView()->setCurrentIndex(m_pPressItem->getIndex()) ;
 				event->accept() ;
 				update() ;
+
+				emit sig_changePos(m_pPressItem->getPos()) ;
 				return ;
 			}
 		}
@@ -179,6 +183,7 @@ void CGLGameView::mouseMoveEvent(QMouseEvent *event)
 				m_pPressItem->setPos(pos) ;
 
 				m_oldMousePos = event->pos() ;
+				emit sig_changePos(m_pPressItem->getPos()) ;
 			}
 			update() ;
 			break ;
@@ -187,10 +192,15 @@ void CGLGameView::mouseMoveEvent(QMouseEvent *event)
 
 void CGLGameView::mouseReleaseEvent(QMouseEvent *event)
 {
+Q_UNUSED(event)
 	switch ( m_editMode ) {
 		case kEditMode_Normal:
 			if ( m_oldItemPos != m_pPressItem->getPos() ) {
-				// TODO:編集コマンド
+				QList<QWidget *> widget ;
+				widget << this ;
+				gEditData.cmd_moveItem(m_pPressItem->getIndex(), m_oldItemPos, widget) ;
+
+				emit sig_changePos(m_pPressItem->getPos()) ;
 			}
 			break ;
 	}

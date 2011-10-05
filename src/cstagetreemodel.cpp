@@ -105,6 +105,12 @@ CStageTreeItem *CStageTreeModel::getItem(const QModelIndex &index) const
 	return static_cast<CStageTreeItem *>(index.internalPointer()) ;
 }
 
+CStageTreeItem *CStageTreeModel::getItem(int absoluteRow)
+{
+	int row = 0 ;
+	return getItem(m_pRootItem, absoluteRow, &row) ;
+}
+
 QModelIndex CStageTreeModel::addItem(int type, QString name)
 {
 	CStageTreeItem *p = NULL ;
@@ -152,6 +158,16 @@ QModelIndex CStageTreeModel::getIndex(int type)
 	return QModelIndex() ;
 }
 
+int CStageTreeModel::getAbsoluteRow(const QModelIndex &index)
+{
+	if ( !index.isValid() ) { return 0 ; }
+	CStageTreeItem *p = getItem(index) ;
+	if ( !p ) { return 0  ; }
+	int row = 0 ;
+	return getAbsoluteRow(m_pRootItem, p, &row) ;
+}
+
+
 
 void CStageTreeModel::updateIndex(CStageTreeItem *p, int row, QModelIndex parent)
 {
@@ -165,6 +181,29 @@ void CStageTreeModel::updateIndex(CStageTreeItem *p, int row, QModelIndex parent
 		updateIndex(p->child(i), i, p->getIndex()) ;
 	}
 }
+
+int CStageTreeModel::getAbsoluteRow(CStageTreeItem *pRoot, CStageTreeItem *p, int *pRow)
+{
+	if ( pRoot == p ) { return *pRow ; }
+	for ( int i = 0 ; i < pRoot->childCount() ; i ++ ) {
+		*pRow += 1 ;
+		int tmp = getAbsoluteRow(pRoot->child(i), p, pRow) ;
+		if ( tmp ) { return tmp ; }
+	}
+	return 0 ;
+}
+
+CStageTreeItem *CStageTreeModel::getItem(CStageTreeItem *pRoot, int row, int *pCurrRow)
+{
+	if ( row == *pCurrRow ) { return pRoot ; }
+	for ( int i = 0 ; i < pRoot->childCount() ; i ++ ) {
+		*pCurrRow += 1 ;
+		CStageTreeItem *p = getItem(pRoot->child(i), row, pCurrRow) ;
+		if ( p ) { return p ; }
+	}
+	return NULL ;
+}
+
 
 
 

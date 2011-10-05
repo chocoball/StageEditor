@@ -27,6 +27,7 @@ signals:
 	void sig_changeMapSize() ;
 
 protected:
+	void resizeEvent(QResizeEvent *) ;
 
 private:
 	Ui::Form_Maptab *ui ;

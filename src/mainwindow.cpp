@@ -12,10 +12,17 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui(new Ui::MainWindow)
 {
 	gSetting.read() ;
-	gEditData.initialize();
+	gEditData.initialize() ;
 
 	ui->setupUi(this) ;
 	ui->centralWidget->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored) ;
+
+	QAction *p = gEditData.getUndoStack()->createUndoAction(this, trUtf8("元に戻す")) ;
+	p->setShortcut(QKeySequence::Undo) ;
+	ui->menu_edit->addAction(p) ;
+	p = gEditData.getUndoStack()->createRedoAction(this, trUtf8("やり直す")) ;
+	p->setShortcut(QKeySequence::Redo) ;
+	ui->menu_edit->addAction(p) ;
 
 	addUIs() ;
 	restoreSetting() ;
@@ -45,20 +52,13 @@ void MainWindow::slot_stageTreeCustomContextMenu(QPoint pos)
 	}
 }
 
-void MainWindow::slot_changeMapSize()
-{
-	m_pGlView->resize(gEditData.getMapSize()) ;
-	m_pGlView->update() ;
-}
-
-void MainWindow::slot_clickStageTree(QModelIndex)
-{
-	m_pGlView->update() ;
-}
-
 void MainWindow::closeEvent(QCloseEvent *event)
 {
 Q_UNUSED(event)
+
+	// TODO:編集確認
+
+	m_pGameView->close() ;
 	writeSetting() ;
 	gEditData.release() ;
 }
@@ -83,28 +83,21 @@ void MainWindow::addUIs()
 		m_pStageTree->setModel(gEditData.getStageModel()) ;
 		m_pStageTree->setMinimumSize(100, 300) ;
 		m_pStageTree->setHeaderHidden(true) ;
-		connect(m_pStageTree, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slot_stageTreeCustomContextMenu(QPoint))) ;
-		connect(m_pStageTree, SIGNAL(clicked(QModelIndex)), this, SLOT(slot_clickStageTree(QModelIndex))) ;
 		gEditData.setStageTreeView(m_pStageTree) ;
 
-		QScrollArea *pScroll = new QScrollArea(this) ;
-		pScroll->setWidgetResizable(false) ;
-		{
-			m_pGlView = new CGLGameView(this) ;
-			m_pGlView->resize(1024, 1024);
-			m_pGlView->setAcceptDrops(true) ;
-			pScroll->setWidget(m_pGlView) ;
-		}
+		m_pGameView = new Form_GameDetail(this) ;
 
 		QTabWidget *pTabWidget = new QTabWidget(this) ;
 		Form_Maptab *pMapTab = new Form_Maptab(this) ;
 		pTabWidget->insertTab(0, pMapTab, "Map") ;
-		pTabWidget->insertTab(1, new QWidget(this), "Object") ;
+		pTabWidget->insertTab(1, new QWidget(this), "Object") ;	// TODO:GUI作る
 
-		connect(pMapTab, SIGNAL(sig_changeMapSize()), this, SLOT(slot_changeMapSize())) ;
+		connect(m_pStageTree, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slot_stageTreeCustomContextMenu(QPoint))) ;
+		connect(m_pStageTree, SIGNAL(clicked(QModelIndex)), m_pGameView, SLOT(slot_clickStageTree(QModelIndex))) ;
+		connect(pMapTab, SIGNAL(sig_changeMapSize()), m_pGameView, SLOT(slot_changeMapSize())) ;
 
 		m_pSplitter->addWidget(m_pStageTree) ;
-		m_pSplitter->addWidget(pScroll) ;
+		m_pSplitter->addWidget(m_pGameView) ;
 		m_pSplitter->addWidget(pTabWidget) ;
 	}
 }
