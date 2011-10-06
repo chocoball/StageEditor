@@ -1,6 +1,6 @@
 #include <QFile>
 #include <QStringList>
-#include <GL/gl.h>
+#include <QGLWidget>
 #include "canm2d.h"
 #include "ceditdata.h"
 

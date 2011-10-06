@@ -2,7 +2,7 @@
 #define CEDITDATA_H
 
 #include <QTreeView>
-#include <GL/gl.h>
+#include <QGLWidget>
 #include <QUndoStack>
 #include "include.h"
 #include "cstagetreemodel.h"
